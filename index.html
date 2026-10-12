@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MAKZA — Personal Blog</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #14100d;
+    --bg-2: #1c1613;
+    --card: #221a15;
+    --cream: #f4ece2;
+    --muted: #a89685;
+    --accent: #d4a373;
+    --accent-2: #c88a5c;
+    --border: rgba(212,163,115,.18);
+    --shadow: 0 20px 60px rgba(0,0,0,.5);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--cream);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", sans-serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    height: 100dvh;
+    min-height: 660px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('makza.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #2c3e50;
+    transform: scale(1.02);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom {
+    from { transform: scale(1.02); }
+    to { transform: scale(1.08); }
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at center, rgba(0,0,0,.1) 30%, rgba(0,0,0,.55) 100%),
+      linear-gradient(180deg, rgba(20,16,13,.55) 0%, rgba(20,16,13,.15) 35%, rgba(20,16,13,.9) 100%);
+  }
+
+  /* QR — левый верхний */
+  .qr {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: fadeDown .9s ease-out both;
+  }
+  .qr img {
+    width: 160px;
+    height: 160px;
+    border-radius: 14px;
+    background: #fff;
+    padding: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    display: block;
+    transition: transform .3s;
+  }
+  .qr:hover img { transform: translateY(-3px) scale(1.02); }
+  .qr-label {
+    font-size: .68rem;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.9);
+    text-shadow: 0 2px 8px rgba(0,0,0,.7);
+    font-weight: 500;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ЯЗЫКОВОЙ ПЕРЕКЛЮЧАТЕЛЬ */
+  .lang-switch {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 6;
+    display: flex;
+    gap: 4px;
+    background: rgba(20,16,13,.55);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 30px;
+    padding: 4px;
+    animation: fadeDown .9s ease-out both;
+  }
+  .lang-btn {
+    background: transparent;
+    border: none;
+    color: rgba(244,236,226,.75);
+    font-family: inherit;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .12em;
+    padding: .5rem .95rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all .25s;
+    text-transform: uppercase;
+  }
+  .lang-btn:hover { color: var(--cream); }
+  .lang-btn.active {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #1c1613;
+    box-shadow: 0 4px 14px rgba(212,163,115,.4);
+  }
+
+  /* Центральный контент героя */
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 0 2rem;
+    animation: fadeUp 1.2s ease-out .2s both;
+    max-width: 720px;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-eyebrow {
+    font-size: .72rem;
+    letter-spacing: .5em;
+    text-transform: uppercase;
+    color: rgba(244,236,226,.75);
+    margin-bottom: 1.2rem;
+    text-shadow: 0 2px 10px rgba(0,0,0,.6);
+  }
+
+  .hero-name {
+    font-family: 'Georgia', serif;
+    font-size: clamp(3.2rem, 11vw, 7.5rem);
+    font-weight: 400;
+    letter-spacing: .04em;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 4px 40px rgba(0,0,0,.55);
+    margin-bottom: .3rem;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  /* ============ РАСШИФРОВКА ИМЕНИ ============ */
+  .name-origin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .7rem;
+    margin: 1.6rem auto 1.4rem;
+    animation: fadeUp 1.4s ease-out .55s both;
+  }
+
+  .origin-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 240px;
+    max-width: 60vw;
+    color: var(--accent);
+    opacity: .85;
+  }
+  .origin-divider::before,
+  .origin-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(212,163,115,.65));
+  }
+  .origin-divider::after {
+    background: linear-gradient(to left, transparent, rgba(212,163,115,.65));
+  }
+  .origin-divider span {
+    padding: 0 .9rem;
+    font-size: .6rem;
+    letter-spacing: .1em;
+  }
+
+  .origin-caption {
+    font-family: -apple-system, sans-serif;
+    font-size: .62rem;
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: rgba(244,236,226,.78);
+    text-shadow: 0 2px 8px rgba(0,0,0,.7);
+    font-weight: 500;
+  }
+
+  .origin-equation {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: .55rem;
+    font-family: 'Georgia', serif;
+    color: #fff;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1;
+    margin-top: .1rem;
+    text-shadow: 0 2px 14px rgba(0,0,0,.75);
+  }
+
+  .eq-word {
+    display: inline-flex;
+    align-items: baseline;
+    letter-spacing: .01em;
+  }
+  .eq-word em {
+    font-style: normal;
+    letter-spacing: .18em;
+    padding-right: .02em;
+  }
+  .eq-suffix {
+    font-size: .55em;
+    color: var(--accent);
+    letter-spacing: .06em;
+    margin-left: .03em;
+    font-style: italic;
+  }
+  .eq-op {
+    color: var(--accent);
+    font-size: .85em;
+    opacity: .8;
+    padding: 0 .15rem;
+    transform: translateY(-.05em);
+  }
+
+  .hero-sub {
+    font-size: clamp(.9rem, 1.9vw, 1.08rem);
+    color: rgba(244,236,226,.85);
+    max-width: 540px;
+    margin: 1.4rem auto 0;
+    letter-spacing: .04em;
+    text-shadow: 0 2px 10px rgba(0,0,0,.6);
+    line-height: 1.6;
+  }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: rgba(244,236,226,.7);
+    text-decoration: none;
+    font-size: .7rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    animation: bounce 2.4s ease-in-out infinite;
+  }
+  .scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(244,236,226,.7), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); opacity: .7; }
+    50% { transform: translateX(-50%) translateY(6px); opacity: 1; }
+  }
+
+  /* ============ ЛЕНТА ============ */
+  .feed-section { background: var(--bg); padding: 5rem 1.5rem 7rem; }
+  .feed-inner { max-width: 760px; margin: 0 auto; }
+
+  .feed-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+  .feed-title { font-family: 'Georgia', serif; font-size: 1.6rem; font-weight: 400; }
+  .feed-title > span:first-child {
+    display: block;
+    font-family: -apple-system, sans-serif;
+    font-size: .7rem;
+    letter-spacing: .4em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: .5rem;
+  }
+  .feed-count { font-size: .8rem; color: var(--muted); letter-spacing: .1em; }
+
+  .entry {
+    padding: 2.4rem 0 2.8rem;
+    border-bottom: 1px solid var(--border);
+    animation: entryIn .5s ease both;
+  }
+  .entry:last-child { border-bottom: none; }
+  @keyframes entryIn {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-meta { display: flex; align-items: center; gap: .9rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .entry-date {
+    font-size: .78rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--accent);
+  }
+  .entry-tag {
+    font-size: .68rem; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--muted); padding: .3rem .8rem;
+    border: 1px solid var(--border); border-radius: 20px;
+  }
+  .entry-title {
+    font-family: 'Georgia', serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 400; line-height: 1.25; margin-bottom: 1rem;
+  }
+  .entry-text {
+    color: #d8c8b8; font-size: 1.02rem;
+    white-space: pre-wrap; margin-bottom: 1.4rem;
+  }
+  .entry-photos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: .6rem; margin: 1.4rem 0;
+  }
+  .entry-photos img {
+    width: 100%; aspect-ratio: 1/1; object-fit: cover;
+    border-radius: 4px; cursor: zoom-in;
+    transition: transform .5s ease, filter .3s; display: block;
+  }
+  .entry-photos img:hover { transform: scale(1.02); filter: brightness(1.08); }
+  .entry-photos.single { grid-template-columns: 1fr; }
+  .entry-photos.single img { aspect-ratio: auto; max-height: 620px; object-fit: cover; }
+
+  .entry-actions {
+    display: flex; gap: .6rem; margin-top: 1rem;
+    opacity: 0; transition: opacity .25s;
+  }
+  .entry:hover .entry-actions { opacity: 1; }
+
+  .action-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--muted); padding: .35rem .85rem; border-radius: 20px;
+    font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+    cursor: pointer; transition: all .25s; font-family: inherit;
+  }
+  .action-btn:hover { color: var(--accent); border-color: var(--accent); }
+  .action-btn.danger:hover { color: #e07a7a; border-color: #e07a7a; }
+
+  .empty { text-align: center; padding: 5rem 1rem; color: var(--muted); }
+  .empty-icon { font-size: 2.6rem; margin-bottom: 1.4rem; opacity: .35; }
+  .empty p { font-size: 1rem; max-width: 400px; margin: 0 auto; }
+
+  /* ============ FAB ============ */
+  .fab {
+    position: fixed; bottom: 28px; right: 28px; z-index: 60;
+    width: 60px; height: 60px; border-radius: 50%; border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #1c1613; font-size: 1.8rem; cursor: pointer;
+    box-shadow: 0 12px 30px rgba(212,163,115,.4), 0 6px 18px rgba(0,0,0,.35);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .25s; font-weight: 300; line-height: 1;
+    padding-bottom: 4px;
+  }
+  .fab:hover { transform: translateY(-3px) rotate(90deg); }
+  .fab:active { transform: scale(.94) rotate(90deg); }
+
+  /* ============ MODAL ============ */
+  .modal {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(10,7,5,.75);
+    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding: 2rem 1rem; overflow-y: auto;
+    animation: modalIn .25s ease;
+  }
+  .modal.open { display: flex; }
+  @keyframes modalIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal-card {
+    width: 100%; max-width: 640px;
+    background: linear-gradient(160deg, rgba(34,26,21,.98), rgba(20,16,13,.98));
+    border: 1px solid var(--border); border-radius: 8px;
+    padding: 2.2rem; margin: auto 0;
+    box-shadow: var(--shadow);
+    animation: cardIn .35s ease;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .modal-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 1.8rem;
+  }
+  .modal-head h2 { font-family: 'Georgia', serif; font-size: 1.5rem; font-weight: 400; }
+  .close-btn {
+    background: transparent; border: none; color: var(--muted);
+    font-size: 1.7rem; cursor: pointer; line-height: 1;
+    padding: 0 .3rem; transition: color .2s;
+  }
+  .close-btn:hover { color: var(--accent); }
+
+  .field { margin-bottom: 1.2rem; }
+  .field label {
+    display: block; font-size: .7rem; letter-spacing: .22em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: .55rem;
+  }
+  .field input, .field textarea, .field select {
+    width: 100%; background: rgba(255,255,255,.04);
+    border: 1px solid var(--border); color: var(--cream);
+    padding: .85rem 1rem; border-radius: 4px;
+    font-family: inherit; font-size: .98rem;
+    transition: border-color .25s, background .25s;
+  }
+  .field input:focus, .field textarea:focus, .field select:focus {
+    outline: none; border-color: var(--accent);
+    background: rgba(212,163,115,.06);
+  }
+  .field textarea { resize: vertical; min-height: 150px; line-height: 1.7; }
+  .field select option { background: #221a15; color: var(--cream); }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .drop {
+    border: 1.5px dashed var(--border); border-radius: 6px;
+    padding: 2rem 1.5rem; text-align: center; cursor: pointer;
+    color: var(--muted); font-size: .9rem; transition: all .25s;
+  }
+  .drop:hover, .drop.drag {
+    border-color: var(--accent); color: var(--accent);
+    background: rgba(212,163,115,.06);
+  }
+  .drop-icon { font-size: 1.6rem; display: block; margin-bottom: .5rem; }
+  .drop input { display: none; }
+
+  .previews {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    gap: .6rem; margin-top: 1rem;
+  }
+  .preview {
+    position: relative; aspect-ratio: 1; border-radius: 4px;
+    overflow: hidden; border: 1px solid var(--border);
+  }
+  .preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .preview button {
+    position: absolute; top: 4px; right: 4px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(0,0,0,.8); border: none; color: #fff;
+    font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; line-height: 1;
+  }
+  .preview button:hover { background: var(--accent); color: #1c1613; }
+
+  .modal-actions { display: flex; gap: .8rem; margin-top: 1.8rem; flex-wrap: wrap; }
+  .btn {
+    padding: .85rem 1.8rem; border-radius: 4px;
+    font-family: inherit; font-size: .8rem; letter-spacing: .2em;
+    text-transform: uppercase; cursor: pointer;
+    border: 1px solid var(--accent); background: transparent;
+    color: var(--cream); transition: all .25s;
+  }
+  .btn:hover { background: rgba(212,163,115,.1); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-color: transparent; color: #1c1613; font-weight: 600;
+  }
+  .btn-primary:hover { box-shadow: 0 8px 24px rgba(212,163,115,.4); transform: translateY(-1px); }
+  .btn-ghost { border-color: var(--border); color: var(--muted); }
+  .btn-ghost:hover { color: var(--cream); border-color: var(--cream); }
+
+  /* ============ LIGHTBOX ============ */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 300;
+    background: rgba(0,0,0,.95); display: none;
+    align-items: center; justify-content: center;
+    padding: 2rem; cursor: zoom-out;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 100%; max-height: 90vh; border-radius: 4px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.7);
+  }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed; bottom: 100px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: #1c1613; padding: .8rem 1.6rem; border-radius: 30px;
+    font-size: .85rem; font-weight: 500; z-index: 400;
+    box-shadow: 0 12px 30px rgba(212,163,115,.4);
+    opacity: 0; transition: transform .4s, opacity .4s;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    text-align: center; padding: 3rem 1.5rem 4rem;
+    background: var(--bg-2); border-top: 1px solid var(--border);
+    color: var(--muted); font-size: .8rem; letter-spacing: .12em;
+  }
+  footer a {
+    color: var(--accent); text-decoration: none;
+    margin: 0 .5rem; transition: color .2s;
+  }
+  footer a:hover { color: var(--cream); }
+  .footer-socials {
+    margin-bottom: 1.2rem; text-transform: uppercase;
+    font-size: .72rem; letter-spacing: .28em;
+  }
+
+  /* ============ ADAPTIVE ============ */
+  @media (max-width: 640px) {
+    .qr { top: 14px; left: 14px; gap: 6px; }
+    .qr img { width: 90px; height: 90px; padding: 4px; border-radius: 10px; }
+    .qr-label { font-size: .55rem; letter-spacing: .18em; }
+
+    .lang-switch { top: 14px; right: 14px; padding: 3px; }
+    .lang-btn { padding: .4rem .65rem; font-size: .65rem; letter-spacing: .08em; }
+
+    .hero-name { font-size: clamp(3rem, 17vw, 4.5rem); }
+
+    .name-origin { margin: 1.2rem auto 1.1rem; gap: .55rem; }
+    .origin-divider { width: 180px; }
+    .origin-caption { font-size: .58rem; letter-spacing: .28em; }
+    .origin-equation { font-size: 1.5rem; gap: .45rem; }
+
+    .hero-sub { font-size: .92rem; margin-top: 1.1rem; }
+
+    .feed-section { padding: 3.5rem 1.2rem 5rem; }
+    .feed-header { flex-direction: column; align-items: flex-start; gap: .5rem; }
+
+    .modal { padding: 1rem .8rem; }
+    .modal-card { padding: 1.5rem; }
+    .field-row { grid-template-columns: 1fr; gap: .8rem; }
+
+    .fab { bottom: 20px; right: 20px; width: 54px; height: 54px; font-size: 1.6rem; }
+    .entry-actions { opacity: 1; }
+
+    .scroll-hint { bottom: 20px; }
+  }
+
+  @media (max-height: 720px) and (max-width: 640px) {
+    .name-origin { margin: .8rem auto; }
+    .origin-divider { display: none; }
+    .origin-caption { display: none; }
+    .scroll-hint { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <a class="qr" href="https://instagram.com/makza_lada" target="_blank" rel="noopener">
+    <img src="qr-code.png" alt="QR — Instagram MAKZA_LADA">
+    <span class="qr-label">Makza_Lada</span>
+  </a>
+
+  <div class="lang-switch" role="group" aria-label="Language">
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+    <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">RU</button>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow" data-i18n="eyebrow">Личный блог</div>
+
+    <h1 class="hero-name">MAKZA <em>Lada</em></h1>
+
+    <!-- РАСШИФРОВКА СЦЕНИЧЕСКОГО ИМЕНИ -->
+    <div class="name-origin">
+      <div class="origin-divider"><span>✦</span></div>
+      <div class="origin-caption" data-i18n="originCaption">Сценическое имя</div>
+      <div class="origin-equation" aria-label="LADA from LAp + DAncer">
+        <span class="eq-word"><em>LA</em><span class="eq-suffix">p</span></span>
+        <span class="eq-op">+</span>
+        <span class="eq-word"><em>DA</em><span class="eq-suffix">ncer</span></span>
+      </div>
+    </div>
+
+    <p class="hero-sub" data-i18n="tagline">Дневник о танце, путешествиях и жизни между сценой и морем</p>
+  </div>
+
+  <a href="#feed" class="scroll-hint" data-i18n="scrollHint">Дневник</a>
+</section>
+
+<!-- ============ ЛЕНТА ============ -->
+<section class="feed-section" id="feed">
+  <div class="feed-inner">
+    <div class="feed-header">
+      <h2 class="feed-title">
+        <span data-i18n="feedEyebrow">Дневник</span>
+        <span data-i18n="feedTitle">Заметки и фотографии</span>
+      </h2>
+      <div class="feed-count" id="count"></div>
+    </div>
+    <div id="entries"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-socials">
+    <a href="https://instagram.com/makza_lada" target="_blank" rel="noopener">Instagram</a>
+    <a href="#" onclick="exportData(); return false;" data-i18n="export">Экспорт</a>
+    <a href="#" onclick="document.getElementById('importFile').click(); return false;" data-i18n="import">Импорт</a>
+    <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+  <div>© <span id="year"></span> MAKZA Lada. <span data-i18n="rights">Все права защищены.</span></div>
+</footer>
+
+<button class="fab" onclick="openEditor()" data-i18n-title="newEntry" title="Новая запись">+</button>
+
+<!-- ============ MODAL ============ -->
+<div class="modal" id="modal" onclick="if(event.target===this) closeEditor()">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modalTitle">✍️ <span data-i18n="newEntry">Новая запись</span></h2>
+      <button class="close-btn" onclick="closeEditor()" aria-label="Close">×</button>
+    </div>
+
+    <div class="field">
+      <label data-i18n="fieldTitle">Заголовок</label>
+      <input type="text" id="inpTitle" data-i18n-ph="phTitle" placeholder="О чём эта запись?">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label data-i18n="fieldDate">Дата</label>
+        <input type="date" id="inpDate">
+      </div>
+      <div class="field">
+        <label data-i18n="fieldCategory">Категория</label>
+        <select id="inpTag">
+          <option value="dance" data-i18n="catDance">Танец</option>
+          <option value="travel" data-i18n="catTravel">Путешествие</option>
+          <option value="training" data-i18n="catTraining">Тренировка</option>
+          <option value="show" data-i18n="catShow">Выступление</option>
+          <option value="thoughts" data-i18n="catThoughts">Мысли</option>
+          <option value="backstage" data-i18n="catBackstage">За кулисами</option>
+          <option value="sea" data-i18n="catSea">Море</option>
+          <option value="inspiration" data-i18n="catInspiration">Вдохновение</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label data-i18n="fieldText">Текст заметки</label>
+      <textarea id="inpText" data-i18n-ph="phText" placeholder="Как прошёл день? Что запомнилось?"></textarea>
+    </div>
+
+    <div class="field">
+      <label data-i18n="fieldPhotos">Фотографии</label>
+      <div class="drop" id="drop" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept="image/*" multiple>
+        <span class="drop-icon">📷</span>
+        <span data-i18n="dropText">Нажми или перетащи фото сюда (можно несколько)</span>
+      </div>
+      <div class="previews" id="previews"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-primary" onclick="saveEntry()" data-i18n="save">Сохранить</button>
+      <button class="btn btn-ghost" onclick="closeEditor()" data-i18n="cancel">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================================================
+   ПЕРЕВОДЫ
+   ========================================================= */
+const I18N = {
+  ru: {
+    eyebrow: 'Личный блог',
+    originCaption: 'Сценическое имя',
+    tagline: 'Дневник о танце, путешествиях и жизни между сценой и морем',
+    scrollHint: 'Дневник',
+    feedEyebrow: 'Дневник',
+    feedTitle: 'Заметки и фотографии',
+    export: 'Экспорт', import: 'Импорт',
+    rights: 'Все права защищены.',
+    newEntry: 'Новая запись', editEntry: 'Редактирование',
+    fieldTitle: 'Заголовок', phTitle: 'О чём эта запись?',
+    fieldDate: 'Дата', fieldCategory: 'Категория',
+    fieldText: 'Текст заметки', phText: 'Как прошёл день? Что запомнилось?',
+    fieldPhotos: 'Фотографии',
+    dropText: 'Нажми или перетащи фото сюда (можно несколько)',
+    save: 'Сохранить', cancel: 'Отмена',
+    edit: 'Изменить', del: 'Удалить',
+    empty: 'Пока здесь тихо. Нажми кнопку «+» внизу справа, чтобы добавить первую запись.',
+    catDance: 'Танец', catTravel: 'Путешествие', catTraining: 'Тренировка',
+    catShow: 'Выступление', catThoughts: 'Мысли', catBackstage: 'За кулисами',
+    catSea: 'Море', catInspiration: 'Вдохновение',
+    toastAdded: 'Запись добавлена', toastUpdated: 'Запись обновлена',
+    toastDeleted: 'Удалено', toastNeedContent: 'Добавь заголовок, текст или фото',
+    toastExported: 'Файл скачан', toastImported: 'Загружено записей: ',
+    toastImportFail: 'Не удалось прочитать файл',
+    toastNothingExport: 'Пока нечего экспортировать',
+    confirmDelete: 'Удалить запись? Это действие нельзя отменить.',
+    confirmImport: 'Добавить записей из файла: ',
+    countForms: ['запись', 'записи', 'записей'],
+    months: ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря']
+  },
+  en: {
+    eyebrow: 'Personal Blog',
+    originCaption: 'Stage name',
+    tagline: 'A diary about dance, travel and life between the stage and the sea',
+    scrollHint: 'Diary',
+    feedEyebrow: 'Diary',
+    feedTitle: 'Notes & photographs',
+    export: 'Export', import: 'Import',
+    rights: 'All rights reserved.',
+    newEntry: 'New entry', editEntry: 'Edit entry',
+    fieldTitle: 'Title', phTitle: 'What is this entry about?',
+    fieldDate: 'Date', fieldCategory: 'Category',
+    fieldText: 'Note', phText: 'How was your day? What do you remember?',
+    fieldPhotos: 'Photos',
+    dropText: 'Click or drag photos here (multiple allowed)',
+    save: 'Save', cancel: 'Cancel',
+    edit: 'Edit', del: 'Delete',
+    empty: 'Nothing here yet. Tap the «+» button at the bottom right to add your first entry.',
+    catDance: 'Dance', catTravel: 'Travel', catTraining: 'Training',
+    catShow: 'Performance', catThoughts: 'Thoughts', catBackstage: 'Backstage',
+    catSea: 'Sea', catInspiration: 'Inspiration',
+    toastAdded: 'Entry added', toastUpdated: 'Entry updated',
+    toastDeleted: 'Deleted', toastNeedContent: 'Add a title, text or photo',
+    toastExported: 'File downloaded', toastImported: 'Entries loaded: ',
+    toastImportFail: 'Could not read file',
+    toastNothingExport: 'Nothing to export yet',
+    confirmDelete: 'Delete this entry? This cannot be undone.',
+    confirmImport: 'Add entries from file: ',
+    countForms: ['entry', 'entries'],
+    months: ['January','February','March','April','May','June','July','August','September','October','November','December']
+  },
+  es: {
+    eyebrow: 'Blog personal',
+    originCaption: 'Nombre artístico',
+    tagline: 'Un diario sobre danza, viajes y la vida entre el escenario y el mar',
+    scrollHint: 'Diario',
+    feedEyebrow: 'Diario',
+    feedTitle: 'Notas y fotografías',
+    export: 'Exportar', import: 'Importar',
+    rights: 'Todos los derechos reservados.',
+    newEntry: 'Nueva entrada', editEntry: 'Editar entrada',
+    fieldTitle: 'Título', phTitle: '¿De qué trata esta entrada?',
+    fieldDate: 'Fecha', fieldCategory: 'Categoría',
+    fieldText: 'Nota', phText: '¿Cómo fue tu día? ¿Qué recuerdas?',
+    fieldPhotos: 'Fotos',
+    dropText: 'Haz clic o arrastra fotos aquí (varias permitidas)',
+    save: 'Guardar', cancel: 'Cancelar',
+    edit: 'Editar', del: 'Eliminar',
+    empty: 'Aún no hay nada. Pulsa el botón «+» abajo a la derecha para añadir tu primera entrada.',
+    catDance: 'Danza', catTravel: 'Viaje', catTraining: 'Entrenamiento',
+    catShow: 'Actuación', catThoughts: 'Pensamientos', catBackstage: 'Tras bambalinas',
+    catSea: 'Mar', catInspiration: 'Inspiración',
+    toastAdded: 'Entrada añadida', toastUpdated: 'Entrada actualizada',
+    toastDeleted: 'Eliminado', toastNeedContent: 'Añade un título, texto o foto',
+    toastExported: 'Archivo descargado', toastImported: 'Entradas cargadas: ',
+    toastImportFail: 'No se pudo leer el archivo',
+    toastNothingExport: 'Aún no hay nada para exportar',
+    confirmDelete: '¿Eliminar esta entrada? Esta acción no se puede deshacer.',
+    confirmImport: 'Añadir entradas del archivo: ',
+    countForms: ['entrada', 'entradas'],
+    months: ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+  }
+};
+
+const SUPPORTED = ['ru', 'en', 'es'];
+let lang = localStorage.getItem('makza_lang');
+if (!SUPPORTED.includes(lang)) {
+  const nav = (navigator.language || 'ru').slice(0, 2);
+  lang = SUPPORTED.includes(nav) ? nav : 'ru';
+}
+
+function t(key) {
+  const dict = I18N[lang] || I18N.ru;
+  return dict[key] !== undefined ? dict[key] : (I18N.ru[key] || key);
+}
+
+/* ============ ДАННЫЕ ============ */
+const KEY = 'makza_blog_v1';
+let entries = [];
+let editingId = null;
+let pendingPhotos = [];
+try { entries = JSON.parse(localStorage.getItem(KEY) || '[]'); } catch(e) { entries = []; }
+
+const $ = id => document.getElementById(id);
+
+function saveData() {
+  try { localStorage.setItem(KEY, JSON.stringify(entries)); }
+  catch(e) { alert('Storage full. Please export and clean old photos.'); }
+}
+
+function toast(msg) {
+  const el = $('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+function esc(s) {
+  return String(s || '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  const months = t('months');
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+
+/* ============ ЯЗЫК ============ */
+function setLang(newLang) {
+  if (!SUPPORTED.includes(newLang)) return;
+  lang = newLang;
+  localStorage.setItem('makza_lang', lang);
+  document.documentElement.lang = lang;
+
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === lang);
+  });
+
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.dataset.i18n;
+    el.textContent = t(key);
+  });
+
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+
+  document.querySelectorAll('#inpTag option').forEach(opt => {
+    const k = opt.dataset.i18n;
+    if (k) opt.textContent = t(k);
+  });
+
+  render();
+}
+
+/* ============ РЕНДЕР ============ */
+function render() {
+  const box = $('entries');
+  const cnt = $('count');
+
+  if (!entries.length) {
+    cnt.textContent = '';
+    box.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">✦</div>
+        <p>${esc(t('empty'))}</p>
+      </div>`;
+    return;
+  }
+
+  const forms = t('countForms');
+  const n = entries.length;
+  let word;
+  if (lang === 'ru') {
+    const mod10 = n % 10, mod100 = n % 100;
+    if (mod10 === 1 && mod100 !== 11) word = forms[0];
+    else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) word = forms[1];
+    else word = forms[2];
+  } else {
+    word = n === 1 ? forms[0] : forms[1];
+  }
+  cnt.textContent = `${n} ${word}`;
+
+  const sorted = [...entries].sort((a, b) =>
+    (b.date || '').localeCompare(a.date || '') || (b.created || 0) - (a.created || 0)
+  );
+
+  box.innerHTML = sorted.map(e => {
+    const photos = e.photos || [];
+    const photoHtml = photos.length
+      ? `<div class="entry-photos ${photos.length === 1 ? 'single' : ''}">
+           ${photos.map(p => `<img src="${p}" alt="" loading="lazy" onclick="openLightbox('${p}')">`).join('')}
+         </div>`
+      : '';
+    const catKey = 'cat' + (e.tag || 'dance').charAt(0).toUpperCase() + (e.tag || 'dance').slice(1);
+    const tagLabel = t(catKey) || e.tag || '';
+
+    return `
+      <article class="entry">
+        <div class="entry-meta">
+          <span class="entry-date">${esc(fmtDate(e.date))}</span>
+          <span class="entry-tag">${esc(tagLabel)}</span>
+        </div>
+        ${e.title ? `<h3 class="entry-title">${esc(e.title)}</h3>` : ''}
+        ${e.text ? `<div class="entry-text">${esc(e.text)}</div>` : ''}
+        ${photoHtml}
+        <div class="entry-actions">
+          <button class="action-btn" onclick="editEntry('${e.id}')">${esc(t('edit'))}</button>
+          <button class="action-btn danger" onclick="deleteEntry('${e.id}')">${esc(t('del'))}</button>
+        </div>
+      </article>`;
+  }).join('');
+}
+
+/* ============ EDITOR ============ */
+function openEditor() {
+  editingId = null;
+  pendingPhotos = [];
+  $('modalTitle').innerHTML = '✍️ <span data-i18n="newEntry">' + esc(t('newEntry')) + '</span>';
+  $('inpTitle').value = '';
+  $('inpText').value = '';
+  $('inpDate').value = todayISO();
+  $('inpTag').value = 'dance';
+  renderPreviews();
+  $('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEditor() {
+  $('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function editEntry(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return;
+  editingId = id;
+  pendingPhotos = [...(e.photos || [])];
+  $('modalTitle').innerHTML = '✏️ <span data-i18n="editEntry">' + esc(t('editEntry')) + '</span>';
+  $('inpTitle').value = e.title || '';
+  $('inpText').value  = e.text || '';
+  $('inpDate').value  = e.date || todayISO();
+  $('inpTag').value   = e.tag || 'dance';
+  renderPreviews();
+  $('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function saveEntry() {
+  const title = $('inpTitle').value.trim();
+  const text  = $('inpText').value.trim();
+  const date  = $('inpDate').value || todayISO();
+  const tag   = $('inpTag').value;
+
+  if (!title && !text && !pendingPhotos.length) {
+    toast(t('toastNeedContent'));
+    return;
+  }
+
+  if (editingId) {
+    const i = entries.findIndex(x => x.id === editingId);
+    if (i > -1) entries[i] = { ...entries[i], title, text, date, tag, photos: [...pendingPhotos] };
+    toast(t('toastUpdated'));
+  } else {
+    entries.push({
+      id: 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      title, text, date, tag,
+      photos: [...pendingPhotos],
+      created: Date.now()
+    });
+    toast(t('toastAdded'));
+  }
+
+  saveData();
+  render();
+  closeEditor();
+  setTimeout(() => {
+    document.getElementById('feed').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 200);
+}
+
+function deleteEntry(id) {
+  if (!confirm(t('confirmDelete'))) return;
+  entries = entries.filter(e => e.id !== id);
+  saveData();
+  render();
+  toast(t('toastDeleted'));
+}
+
+/* ============ ФОТО ============ */
+function renderPreviews() {
+  const box = $('previews');
+  box.innerHTML = pendingPhotos.map((p, i) => `
+    <div class="preview">
+      <img src="${p}" alt="">
+      <button onclick="removePhoto(${i})" title="×">×</button>
+    </div>
+  `).join('');
+}
+
+function removePhoto(i) {
+  pendingPhotos.splice(i, 1);
+  renderPreviews();
+}
+
+function compress(file, maxSize = 1400, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = ev => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxSize || height > maxSize) {
+          if (width > height) {
+            height = Math.round(height * maxSize / width);
+            width = maxSize;
+          } else {
+            width = Math.round(width * maxSize / height);
+            height = maxSize;
+          }
+        }
+        const c = document.createElement('canvas');
+        c.width = width; c.height = height;
+        c.getContext('2d').drawImage(img, 0, 0, width, height);
+        resolve(c.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = ev.target.result;
+    };
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+async function handleFiles(files) {
+  for (const f of files) {
+    if (!f.type.startsWith('image/')) continue;
+    try { pendingPhotos.push(await compress(f)); } catch(e) {}
+  }
+  renderPreviews();
+}
+
+const dropEl = $('drop');
+$('fileInput').addEventListener('change', e => {
+  handleFiles(e.target.files);
+  e.target.value = '';
+});
+['dragenter','dragover'].forEach(ev =>
+  dropEl.addEventListener(ev, e => { e.preventDefault(); dropEl.classList.add('drag'); })
+);
+['dragleave','drop'].forEach(ev =>
+  dropEl.addEventListener(ev, e => { e.preventDefault(); dropEl.classList.remove('drag'); })
+);
+dropEl.addEventListener('drop', e => {
+  if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files);
+});
+
+/* ============ ЭКСПОРТ / ИМПОРТ ============ */
+function exportData() {
+  if (!entries.length) { toast(t('toastNothingExport')); return; }
+  const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `makza-blog-${todayISO()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast(t('toastExported'));
+}
+
+function importData(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!Array.isArray(data)) throw 0;
+      if (!confirm(t('confirmImport') + data.length + '?')) return;
+      const ids = new Set(entries.map(x => x.id));
+      data.forEach(item => {
+        if (!item.id || ids.has(item.id)) {
+          item.id = 'e_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+        }
+        entries.push(item);
+      });
+      saveData();
+      render();
+      toast(t('toastImported') + data.length);
+    } catch(err) {
+      toast(t('toastImportFail'));
+    }
+  };
+  r.readAsText(file);
+  ev.target.value = '';
+}
+
+/* ============ LIGHTBOX ============ */
+function openLightbox(src) {
+  $('lightboxImg').src = src;
+  $('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() {
+  $('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeLightbox(); closeEditor(); }
+});
+
+/* ============ СТАРТ ============ */
+$('year').textContent = new Date().getFullYear();
+$('inpDate').value = todayISO();
+setLang(lang);
+</script>
+</body>
+</html>
